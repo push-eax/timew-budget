@@ -57,7 +57,6 @@ A budget is a _declaration of planned daily time expenditure_ on a given tag. Al
 ```timew-budget``` allows you to set multiple budgets for a single tag, which has two primary use cases:
 1. Defining a budget that _supersedes_ an older budget while retaining the older budget, i.e. without making the new budget retroactive.
     - For example, if you decide to start training for a marathon taking place in April, you might want to increase the size of the ```workout``` budget starting in December to account for the higher training volume, without making it appear that the amount of time spent working out before December was underbudget.
-    - When you run a report that includes both a 
 2. Allocating different budget sizes to different days of the week. In ```timew-budget```, this is implemented using _exclusions_.
     - By default, a budget applies to every day of the week, but you can define specific days of the week that the budget does not apply to.
     - For example, if you want to work out on weekdays and rest on weekends, you can define a budget for the ```workout``` tag for 1 hour that excludes weekends, and another budget for that tag for 0 hours that excludes weekdays.
