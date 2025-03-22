@@ -115,7 +115,7 @@ example3:
     hours: 2                    # 2 hours per day
 ```
 
-If you were to run a report for any week after January 1, you'd get a total ```example3``` budget size of 11h30m, which is 7h30m for each weekday plus 2h for each weekend day.
+If you were to run a report for any week after January 1, you'd get a total ```example3``` budget size of 11h30m, which is 7h30m for all weekdays combined (1h30m * 5 days) plus 4h for both weekend days (2h * 2 days).
 
 ### An example of overlapping budgets
 These budgets overlap during the same dates. The second one will be ignored by ```timew-budget```.
