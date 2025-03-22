@@ -1,0 +1,31 @@
+---
+# timew-budget.yml
+# Copyright © 2025 Kiernan Roche under the MIT License
+
+example:                        # Example tag
+  - date: 2025-01-01            # Effective January 1, 2025
+    hours: 1                    # 1 hour, 33 minutes, and 7 seconds per day
+    minutes: 33         
+    seconds: 7
+example2:
+  - date: 2025-01-01            # Effective January 1, 2025
+    hours: 1                    # 1 hour, 33 minutes, and 7 seconds per day
+    minutes: 33         
+    seconds: 7
+  - date: 2025-02-01            # Effective February 1, 2025
+    hours: 2                    # 2 hours per day
+example3:
+  - date: 2025-01-01            # Effective January 1, 2025
+    exclude: [5, 6]             # Exclude Saturdays and Sundays
+    hours: 1                    # 1 hour and 30 minutes per day
+    minutes: 30  
+  - date: 2025-01-01            # Effective January 1, 2025
+    exclude: [0, 1, 2, 3, 4]    # Exclude weekdays
+    hours: 2                    # 2 hours per day
+example4:
+  - date: 2025-01-01            # Effective January 1, 2025
+    hours: 1                    # 1 hour, 33 minutes, and 7 seconds per day
+    minutes: 33         
+    seconds: 7
+  - date: 2025-01-01            # Effective January 1, 2025
+    hours: 2                    # 2 hours per day
