@@ -2,7 +2,6 @@
 
 ```timew-budget``` is a Timewarrior[^1] extension that implements time budgeting. 
 
-### Sample output
 ```console
 user@host:~$ timew report timew-budget :yesterday
 Tag         Time spent    Budgeted time    Budget surplus    Utilization
@@ -22,7 +21,7 @@ Total       18:22:26      23:30:00         05:07:34          78.19%
 Budget report for period 2025-01-01 to 2025-01-02
 ```
 
-### Why?
+## Why?
 Timewarrior is a fantastic tool for _tracking_ time, especially when integrated with Taskwarrior[^2], but it doesn't have a native way to normatively declare how much time you _should_ be spending on any given thing, or any way of comparing actual time spent against that.
 
 ```timew-budget``` allows you to define daily time budgets for intervals with certain tags in a simple YAML syntax, and uses the Timewarrior extensions API[^3] to compute how time is spent against those budgets over a given period of time.
@@ -34,7 +33,8 @@ Timewarrior is a fantastic tool for _tracking_ time, especially when integrated 
 2. Copy ```timew-budget.py``` into your Timewarrior extensions directory (default is ```~/.timewarrior/extensions/```). Alternatively, symlink ```timew-budget.py``` in that directory to the location of ```timew-budget.py``` in the cloned repo on your system. This is useful if you want to keep the extension up to date without copying it over every time you ```git pull```, or if you want to use another name to invoke the extension e.g. calling it ```budget.py``` instead of ```timew-budget.py```.
 3. Copy ```timew-budget.yml``` into your Timewarrior directory (default is ```~/.timewarrior/```) or to some other location. *You should NOT symlink this to the repo*, because you'll need to customize this and a ```git pull``` will overwrite it.
 4. Add the following line to your Timewarrior config file (default location is ```~/.timewarrior/timewarrior.cfg```): ```budget.file = ABSOLUTE_PATH_TO_YOUR_BUDGET_YML_FILE```. Don't put the path in quotes, Timewarrior doesn't seem to like this.
-5. You're ready to start using the extension. See the next section for usage instructions.
+5. Install ```python3-tabulate``` using your package manager of choice.
+6. You're ready to start using the extension. See the next section for usage instructions.
 
 ## Usage
 Invoke the extension using the command ```timew report timew-budget PERIOD```. For PERIOD, Timewarrior's range hints or explicit dates will work - this is an extension, so Timewarrior is parsing the dates and passing them along. Try ```timew report timew-budget :today``` or ```timew report timew-budget :week```. ```timew-budget``` implements daily budgets, so it doesn't support ranges smaller than 24 hours. 
