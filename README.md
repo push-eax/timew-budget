@@ -1,8 +1,29 @@
-# ```timew-budget``` - budgets for Timewarrior
+# timew-budget: budgets for Timewarrior
 ---
 
-```timew-budget``` is a Timewarrior[^1] extension that implements the notion of budgets. 
+```timew-budget``` is a Timewarrior[^1] extension that implements time budgeting. 
 
+### Sample output
+```console
+user@host:~$ timew report budget :yesterday
+Tag         Time spent    Budgeted time    Budget surplus    Utilization
+----------  ------------  ---------------  ----------------  -------------
+routine     00:36:54      00:45:00         00:08:06          82.0%
+bed         10:21:57      08:30:00         -01:51:57         121.95%
+meditation  00:38:23      00:15:00         -00:23:23         255.89%
+workout     01:03:44      03:15:00         02:11:16          32.68%
+meal        00:29:32      01:30:00         01:00:28          32.81%
+work        05:11:56      06:00:00         00:48:04          86.65%
+plan        00:00:00      00:15:00         00:15:00          0.0%
+content     00:00:00      01:00:00         01:00:00          0.0%
+leisure     00:00:00      02:00:00         02:00:00          0.0%
+
+Total       18:22:26      23:30:00         05:07:34          78.19%
+
+Budget report for period 2025-01-01 to 2025-01-02
+```
+
+### Why?
 Timewarrior is a fantastic tool for _tracking_ time, especially when integrated with Taskwarrior[^2], but it doesn't have a native way to normatively declare how much time you _should_ be spending on any given thing, or any way of comparing actual time spent against that.
 
 ```timew-budget``` allows you to define daily time budgets for intervals with certain tags in a simple YAML syntax, and uses the Timewarrior extensions API[^3] to compute how time is spent against those budgets over a given period of time.
@@ -24,7 +45,6 @@ Next, you'll likely want to write your own budget file, so do that using the exa
 Once you've tweaked it to your needs, have fun!
 
 ## Definitions, syntax, and implementation
-
 A budget is a _declaration of planned daily time expenditure_ on a given tag. All intervals with that tag, irrespective of any other tags, that occur during the report period are summed, and that sum is compared to the sum of the budgets for that tag during the same period, taking any exclusions or supersessions into account (definitions of these terms can be found below in "Exclusions, supersessions, and overlapping budgets").
 
 ### Budget definition
@@ -55,13 +75,12 @@ A budget is a _declaration of planned daily time expenditure_ on a given tag. Al
     - Python's ```sort()``` is stable, so the first budget in the sorted list of budgets with the same date is also necessarily the one that was parsed first.
 
 ### Examples
-
 All examples below are included in the provided ```timew-budget.yml``` file.
 
 #### A simple example
 This budget applies to intervals tagged ```example```. A budget file consists of one of these sections for each budgeted tag, in this exact format.
 
-```
+```yml
 example:                        # Example tag
   - date: 2025-01-01            # Effective January 1, 2025
     hours: 1                    # 1 hour, 33 minutes, and 7 seconds per day
@@ -70,10 +89,9 @@ example:                        # Example tag
 ```
 
 #### An example of supersession
-
 In this example, the second budget supersedes the first budget on February 1, so the first budget will not apply to any dates after January 30.
 
-```
+```yml
 example2:
   - date: 2025-01-01            # Effective January 1, 2025
     hours: 1                    # 1 hour, 33 minutes, and 7 seconds per day
@@ -86,10 +104,9 @@ example2:
 If you were to run a report from January 1 to February 28, you'd get a total ```example2``` budget size of 102h33m30s, which is 46h33m30s for all days in January (1h33m7s per day * 30 days) plus 56h for all days in February (2h per day * 28 days). That total size would be compared to the sum of all intervals tagged ```example2``` during the same period.
 
 #### An example of exclusions
-
 These budgets use exclusions to define different budget sizes for different days of the week.
 
-```
+```yml
 example3:
   - date: 2025-01-01            # Effective January 1, 2025
     exclude: [5, 6]             # Exclude Saturdays and Sundays
@@ -103,10 +120,9 @@ example3:
 If you were to run a report for any week after January 1, you'd get a total ```example3``` budget size of 11h30m, which is 7h30m for each weekday plus 2h for each weekend day.
 
 #### An example of overlapping budgets
-
 These budgets overlap during the same dates. The second one will be ignored by ```timew-budget```.
 
-```
+```yml
 example4:
   - date: 2025-01-01            # Effective January 1, 2025
     hours: 1                    # 1 hour, 33 minutes, and 7 seconds per day
