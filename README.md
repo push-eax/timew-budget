@@ -73,10 +73,10 @@ A budget is a _declaration of planned daily time expenditure_ on a given tag. Al
 6. If the remaining budgets have the same date, use the first one that was declared in the budget file.
     - Python's ```sort()``` is stable, so the first budget in the sorted list of budgets with the same date is also necessarily the one that was parsed first.
 
-### Examples
+## Examples
 All examples below are included in the provided ```timew-budget.yml``` file.
 
-#### A simple example
+### A simple example
 This budget applies to intervals tagged ```example```. A budget file consists of one of these sections for each budgeted tag, in this exact format.
 
 ```yml
@@ -87,7 +87,7 @@ example:                        # Example tag
     seconds: 7
 ```
 
-#### An example of supersession
+### An example of supersession
 In this example, the second budget supersedes the first budget on February 1, so the first budget will not apply to any dates after January 30.
 
 ```yml
@@ -102,7 +102,7 @@ example2:
 
 If you were to run a report from January 1 to February 28, you'd get a total ```example2``` budget size of 102h33m30s, which is 46h33m30s for all days in January (1h33m7s per day * 30 days) plus 56h for all days in February (2h per day * 28 days). That total size would be compared to the sum of all intervals tagged ```example2``` during the same period.
 
-#### An example of exclusions
+### An example of exclusions
 These budgets use exclusions to define different budget sizes for different days of the week.
 
 ```yml
@@ -118,7 +118,7 @@ example3:
 
 If you were to run a report for any week after January 1, you'd get a total ```example3``` budget size of 11h30m, which is 7h30m for each weekday plus 2h for each weekend day.
 
-#### An example of overlapping budgets
+### An example of overlapping budgets
 These budgets overlap during the same dates. The second one will be ignored by ```timew-budget```.
 
 ```yml
