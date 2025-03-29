@@ -141,16 +141,16 @@ def main():
         print("Report range not specified. Please specify a range or use a range hint.", file=sys.stderr)
         return
     else:
-        report_start = datetime.datetime.fromisoformat(config["temp.report.start"]).date()
-        report_end = datetime.datetime.fromisoformat(config["temp.report.end"]).date()
+        report_start = datetime.datetime.fromisoformat(config["temp.report.start"])
+        report_end = datetime.datetime.fromisoformat(config["temp.report.end"])
 
-    report_duration_days = (report_end - report_start).days
+    report_duration_days = (report_end.date() - report_start.date()).days
 
     if report_duration_days < 1:
         print("Budget report does not support a duration smaller than one day.", file=sys.stderr)
         return
 
-    date_range = [report_start + datetime.timedelta(days=x) for x in range(0, report_duration_days)]
+    date_range = [report_start.date() + datetime.timedelta(days=x) for x in range(0, report_duration_days)]
 
     # calculate budget values
     # this variable contains a mapping of each budget tag to a tuple of budget size, in seconds, and actual time spent, in seconds
@@ -202,11 +202,23 @@ def main():
         if len(tagged_intervals) > 0:
             # for each interval tagged with the budget's tag:
             for interval in tagged_intervals:
-                # by default, time spent is the time from the start of the interval to now
-                time_spent = datetime.datetime.now(datetime.timezone.utc) - datetime.datetime.fromisoformat(interval["start"])
+                # trim interval start time to report start time
+                interval_start = datetime.datetime.fromisoformat(interval["start"])
+                if interval_start < report_start:
+                    interval_start = report_start
+                # if the interval is open, time spent is the time from the start of the interval to now or the end of the report period, whichever comes first
+                now = datetime.datetime.now(datetime.timezone.utc)
+                if report_end < now:
+                    time_spent = report_end - interval_start
+                else:
+                    time_spent = now - interval_start
                 # but if the interval is closed, calculate the delta between the start and end times instead
                 if "end" in interval:
-                    time_spent = datetime.datetime.fromisoformat(interval["end"]) - datetime.datetime.fromisoformat(interval["start"])
+                    # trim interval end time to report end time
+                    interval_end = datetime.datetime.fromisoformat(interval["end"])
+                    if interval_end > report_end:
+                        interval_end = report_end
+                    time_spent = interval_end - interval_start
                 # add the delta to total time spent
                 time_spent_total += time_spent.total_seconds()
         
